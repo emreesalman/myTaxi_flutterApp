@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "4355175321",
+    "project_id": "mytaxi-6e782",
+    "storage_bucket": "mytaxi-6e782.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4355175321:android:40a6e4fa1b4575ea2d1908",
+        "android_client_info": {
+          "package_name": "com.example.mytaxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4355175321-rgkplp6ucqpi2ob6d4trrcnqe9srs37r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mytaxi",
+            "certificate_hash": "d0f8cd88443ec544953029a5a7958ad32b0dc63d"
+          }
+        },
+        {
+          "client_id": "4355175321-prksa4admj3m5re8a10knsbvd3p39kpe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvJfhDpcurxsl3wCCDcUSjORakGpsIc5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4355175321-prksa4admj3m5re8a10knsbvd3p39kpe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
