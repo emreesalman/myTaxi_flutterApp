@@ -6,6 +6,7 @@ import 'package:mytaxi/app/errors.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 class SignUpView extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -22,20 +23,20 @@ class SignUpState extends State<SignUpView>{
     _formSignUpKey.currentState.save();
     final _userModel=Provider.of<UserModel>(context,listen: false);
    try{
-     MyUser _olusturulanUser= await _userModel.createUserWithEmailAndPassword(_email, _password);
-     _olusturulanUser.name=_ad;
-     _olusturulanUser.lastName=_soyad;
-     _olusturulanUser.phoneNumber=_telefon;
+     MyUser _olusturulanUser= await _userModel.createUserWithEmailAndPassword(_email, _password,_ad,_soyad,_telefon);
      if(_olusturulanUser!=null){
-       print("Olusturulan User "+_olusturulanUser.userID.toString());
+       Navigator.of(context).pop();
+       _showDialog(context);
+      await _userModel.signOut();
      }
-   }on PlatformException catch(e){
+   }on FirebaseAuthException catch(e){
      print("user olusturulurken hata: "+e.code.toString());
-
+     return AlertDialogWidget(
+       baslik: 'Kayit Olusturulurken Hata',
+       icerik: e.message.toString(),
+       buttonText: 'Tamam',
+     ).show(context);
    }
-    if(_userModel.user!=null){
-      Navigator.of(context).pop();
-    }
   }
   @override
   Widget build(BuildContext context) {
@@ -103,7 +104,9 @@ class SignUpState extends State<SignUpView>{
                ),
                onSaved: (deger)=>_password=deger,
              ),
-             RaisedButton(onPressed:()=>_formSubmit(context),
+             RaisedButton(onPressed:(){
+               _formSubmit(context);
+             },
                child: Text("Kayit Ol"),
              ),
            ],
@@ -112,7 +115,33 @@ class SignUpState extends State<SignUpView>{
 
    );
   }
-
+  void _showDialog(context){
+    showDialog(context:context,builder: (context){
+    return AlertDialog(
+      title: Row(
+        children: [
+          Text('Kayit Basarili'),
+          Expanded(
+            child: FlatButton(
+              child: Icon(Icons.close),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+        ],
+      ),
+      content: Text('Giris Yapmadan Once Mailinizi Onaylamalisiniz'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text("Tamam"),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  });}
 }
 
 

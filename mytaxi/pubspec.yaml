@@ -45,6 +45,7 @@ dev_dependencies:
   provider: ^4.3.2+3
   get_it: ^5.0.3
   google_sign_in: ^4.5.6
+  intl: ^0.16.0
 # The following section is specific to Flutter.
 flutter:
   assets:

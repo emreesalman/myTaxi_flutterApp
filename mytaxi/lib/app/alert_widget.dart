@@ -14,15 +14,27 @@ class AlertDialogWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(baslik),
+      title: Row(
+        children: [
+          Text(baslik),
+          Expanded(
+              child: FlatButton(
+                child: Icon(Icons.close),
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+        ],
+      ),
       content: Text(icerik),
       actions: <Widget>[
-        FlatButton(
-          child: Text(buttonText),
-          onPressed: (){
-            Navigator.of(context).pop(true);
-          },
-        ),
+            FlatButton(
+              child: Text(buttonText,),
+              onPressed: (){
+                Navigator.of(context).pop(true);
+              },
+            ),
       ],
     );
   }

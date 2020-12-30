@@ -6,6 +6,7 @@ import 'package:mytaxi/app/errors.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 class signInWithEmailAndPassword extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -18,27 +19,35 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
   final _formKey=GlobalKey<FormState>();
 
   _formSubmit(BuildContext context) async{
+     try{
+       _formKey.currentState.save();
+       final _userModel=Provider.of<UserModel>(context,listen: false);
+       MyUser _girisYapanUSer= await _userModel.signInWithEmailAndPassword(_email, _password);
 
-    _formKey.currentState.save();
-    final _userModel=Provider.of<UserModel>(context,listen: false);
-    try{
-      MyUser _girisYapanUSer= await _userModel.signInWithEmailAndPassword(_email, _password);
-      if(_girisYapanUSer!=null) {
-        print("Oturum Acan User "+_girisYapanUSer.userID.toString());
-      }
-    }on PlatformException catch(e){
-      print("oturum acarken Hata: "+Errors.showError(e.code));
-      showDialog(context: context,builder: (context){
-        return AlertDialogWidget(
-          baslik: "Kullanici Giris Yaparken Hata!",
-          icerik: Errors.showError(e.code),
-          buttonText: "Tamam",
-        );
-      });
-    }
-    if(_userModel.user!=null){
-      Navigator.of(context).pop();
-    }
+       if(_girisYapanUSer!=null) {
+         print("Oturum Acan User "+_girisYapanUSer.userID.toString());
+       }
+       else{
+         showDialog(context: context,builder: (context){
+           return AlertDialogWidget(
+             baslik: "Kullanici Giris Yaparken Hata!",
+             icerik: 'Kullanici Bulunamadi veya Hatali Email veya Sifre',
+             buttonText: "Tamam",
+           );
+         });
+       }
+       if(_userModel.user!=null){
+         Navigator.of(context).pop();
+       }
+     }on FirebaseAuthException catch(e){
+       final _userModel=Provider.of<UserModel>(context,listen: false);
+       _userModel.state=ViewState.Idle;
+       return AlertDialogWidget(
+         baslik: 'Giris Yaparken Hata Olustu',
+         icerik: e.message.toString(),
+         buttonText: 'Tamam',
+       ).show(context);
+     }
   }
 
   @override
@@ -55,7 +64,7 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  errorText: _userModel.emailErrorMessage !=null ?_userModel.emailErrorMessage:null,
+                  errorText: _userModel.emailErrorMessage !=null ? _userModel.emailErrorMessage:null,
                   prefixIcon: Icon(Icons.mail),
                   hintText: "E-Mail Adresiniz",
                   labelText: "E-Mail",
@@ -67,7 +76,7 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
-                  errorText: _userModel.passwordErrorMessage !=null ?_userModel.passwordErrorMessage:null,
+                  errorText: _userModel.passwordErrorMessage !=null ? _userModel.passwordErrorMessage:null,
                   prefixIcon: Icon(Icons.lock),
                   hintText: "Sifreniz",
                   labelText: "Sifre",
@@ -78,6 +87,9 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
               RaisedButton(onPressed:()=>_formSubmit(context),
                 child: Text("Giris Yap"),
               ),
+              RaisedButton(onPressed:()=>_forgetPasswordDialog(context),
+                child: Text("Sifremi Unuttum"),
+              ),
             ],
           ),
         ),
@@ -85,6 +97,60 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
 
     );
   }
+  void _forgetPasswordDialog(BuildContext context) {
+    showModalBottomSheet(context: context,builder: (context){
+      TextEditingController _controlEmail=new TextEditingController();
+      final _userModel=Provider.of<UserModel>(context,listen: true);
+      bool sonuc;
+      return Container(
+        height: 600,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                controller: _controlEmail ,
+                decoration: InputDecoration(
+                  labelText: "e-Mail Adresiniz",
+                  hintText: "e-Mail",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            RaisedButton(
+              child: Text('Yolla'),
+              onPressed: () async{
+                if(_controlEmail.text.isNotEmpty&&_controlEmail.text.contains('@')){
+               sonuc= await _userModel.forgetPassword(_controlEmail.text);
+                Navigator.pop(context);
+                if(sonuc){
+                  showDialog(context: context,builder: (context){
+                    return AlertDialogWidget(
+                      baslik: "Mail Gonderildi",
+                      icerik: 'Mailinize Gelen Sifirlama Linkli Ile Sifrenizi Degistirebilirsiniz',
+                      buttonText: "Tamam",
+                    );
+                  });
+                }else{
+                  showDialog(context: context,builder: (context){
+                    return AlertDialogWidget(
+                      baslik: "Kayitli Kullanici Bulunamadi",
+                      icerik: 'Gecersiz veya Kayitli olmayan e-Mail Adresi',
+                      buttonText: "Tamam",
+                    );
+                  });
+                }
+                }
+              },
+            ),
+          ],
+        ),
+
+      );
+    });
+  }
 }
+
+
 
 

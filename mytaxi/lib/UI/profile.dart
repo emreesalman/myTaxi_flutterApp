@@ -3,19 +3,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mytaxi/UI/signup.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mytaxi/app/alert_widget.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'login.dart';
 
 FirebaseAuth _auth = FirebaseAuth.instance;
-FirebaseStorage _firebaseStorage=FirebaseStorage.instance;
-StorageUploadTask _uploadTask;
-StorageReference _reference=FirebaseStorage.instance.ref();
 class profileView extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +19,7 @@ class profileView extends StatefulWidget{
 }
 class ProfileState extends State<profileView>{
 
-  String _email,_password,_newEmail,_newPassword,_smsCode,_url;
+  String _email,_password,_newEmail,_newPassword,_smsCode;
   final FormProfileKey=GlobalKey<FormState>();
 
 
@@ -36,11 +30,13 @@ class ProfileState extends State<profileView>{
   TextEditingController _controlName=new TextEditingController();
   TextEditingController _controlLastName=new TextEditingController();
   TextEditingController _controlPhone=new TextEditingController();
+  TextEditingController _controlUserName=new TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _controlUserName=TextEditingController();
     _controlEmail=TextEditingController();
     _controlName=TextEditingController();
     _controlLastName=TextEditingController();
@@ -52,6 +48,7 @@ class ProfileState extends State<profileView>{
     _controlLastName.dispose();
     _controlPhone.dispose();
     _controlEmail.dispose();
+    _controlUserName.dispose();
     super.dispose();
 
   }
@@ -69,24 +66,8 @@ class ProfileState extends State<profileView>{
       var url= await _userModel.uploadFile(_userModel.user.userID,"profil_foto",File(profileImage.path));
     }
   }
-  void _galeridenResimEkle() async{
-    profileImage=await _imagePicker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _secilenResim=profileImage;
-    });
-    try{
-      final StorageReference _firebaseStorageRef=FirebaseStorage.instance.ref().child("user").child("profil.jpg");
-      final StorageUploadTask task=_firebaseStorageRef.putFile(File(_secilenResim.path));
-      var url=await(await task.onComplete).ref.getDownloadURL();
-      setState(() {
-        _url=url;
-      });
-      debugPrint("URL "+url.toString());
-    }catch(e){
-      debugPrint(e.toString());
-    }
-  }
   void _imageFromGaleri()async{
+    _secilenResim=await _imagePicker.getImage(source: ImageSource.gallery);
     setState(() {
       profileImage=_secilenResim;
       Navigator.of(context).pop();
@@ -99,6 +80,7 @@ class ProfileState extends State<profileView>{
     _controlName.text= _userModel.user.name;
     _controlLastName.text= _userModel.user.lastName;
     _controlPhone.text= _userModel.user.phoneNumber;
+    _controlUserName.text=_userModel.user.userName;
     return Scaffold(
       appBar: AppBar(
         title: Text("Profil"),
@@ -127,12 +109,13 @@ class ProfileState extends State<profileView>{
                               onTap: (){
                                 _imageFromGaleri();
 
-                              },),
+                              },
+                            ),
                           ],
                         ),
                       );
-                    });
-
+                    }
+                    );
                   },
                   child: CircleAvatar(
                     radius: 60,
@@ -148,6 +131,17 @@ class ProfileState extends State<profileView>{
                   decoration: InputDecoration(
                     labelText: "Emailiniz",
                     hintText: "Email",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _controlUserName ,
+                  decoration: InputDecoration(
+                    labelText: "Kullanici Adiniz",
+                    hintText: "Kullanici Adi",
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -201,7 +195,7 @@ class ProfileState extends State<profileView>{
 
   void _userdataUpdate(BuildContext context) async{
     final _userModel=Provider.of<UserModel>(context,listen: false);
-     var updateResault=await _userModel.updateUserData(_userModel.user.userID, _controlName.text,  _controlLastName.text,  _controlPhone.text);
+     var updateResault=await _userModel.updateUserData(_userModel.user.userID, _controlName.text,  _controlLastName.text,  _controlPhone.text,_controlUserName.text);
      if(updateResault==true){
        AlertDialogWidget(
          baslik: "Degisiklikler Kaydedildi",

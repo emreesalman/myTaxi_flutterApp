@@ -1,4 +1,6 @@
 
+import 'package:mytaxi/model/dm_model.dart';
+import 'package:mytaxi/model/message_model.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/services/db_base.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,19 +8,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreDBService implements DBBase{
 
   final FirebaseFirestore _firestoreAuth =FirebaseFirestore.instance;
-  @override
-  Future<bool> saveUser1(MyUser user) async{
-    await _firestoreAuth.collection("users").doc(user.userID).set(user.toMap());
-    return true;
-  }
+
   @override
   Future<bool> saveUser(MyUser user) async{
-      await _firestoreAuth.collection("users").doc(user.userID).set(user.toMap());
-      DocumentSnapshot _readUser=await FirebaseFirestore.instance.doc("users/${user.userID}").get();
-      Map _userData=_readUser.data();
-      MyUser _userDataObject= MyUser.fromMap(_userData);
-      print("okunan User nesnesi from firestore= "+_userDataObject.toString());
-      return true;
+   var temp= _firestoreAuth.collection('users').where('userName',isEqualTo: user.userName);
+    if(temp==null){
+      user.userName=user.userName+'1';
+    }
+   await _firestoreAuth.collection("users").doc(user.userID).set(user.toMap());
+   DocumentSnapshot _readUser=await FirebaseFirestore.instance.doc("users/${user.userID}").get();
+   Map _userData=_readUser.data();
+   MyUser _userDataObject= MyUser.fromMap(_userData);
+   print("okunan User nesnesi from firestore= "+_userDataObject.toString());
+   return true;
   }
 
   @override
@@ -31,11 +33,15 @@ class FirestoreDBService implements DBBase{
   }
 
   @override
-  Future<bool> updateUserData(String userID, String newAd, String newSoyad, String newPhone) async{
+  Future<bool> updateUserData(String userID, String newAd, String newSoyad, String newPhone,String newUserName) async{
     await _firestoreAuth.collection("users").doc(userID).update({"name":newAd});
     await _firestoreAuth.collection("users").doc(userID).update({"lastName":newSoyad});
     await _firestoreAuth.collection("users").doc(userID).update({"phoneNumber":newPhone});
-    return true;
+      await _firestoreAuth.collection("users").doc(userID).update({"userName":newUserName});
+      return true;
+
+
+
   }
 
   @override
@@ -54,6 +60,100 @@ class FirestoreDBService implements DBBase{
     return true;
   }
 
+  @override
+  Future<List<MyUser>> getUser(String userID,String searchingUser) async {
+    List<MyUser> allUser = [];
+      int i=0;
 
-  
+    QuerySnapshot usersFromUserName = await _firestoreAuth.collection("users").where("userName", isEqualTo: searchingUser).get();
+      if(usersFromUserName.docs.length>0){
+        for (DocumentSnapshot user in usersFromUserName.docs) {
+          MyUser _user = MyUser.fromMap(user.data());
+          if (userID != _user.userID) {
+            allUser.add(_user);
+            print("okunan veri username "+_user.userID.toString());
+          }
+        }
+        return allUser;
+      }
+      else{
+        QuerySnapshot usersFromName = await _firestoreAuth.collection("users").where("name", isEqualTo: searchingUser).get();
+        for (DocumentSnapshot users in usersFromName.docs) {
+          MyUser _users = MyUser.fromMap(users.data());
+          if (userID != _users.userID) {
+            allUser.add(_users);
+            print("okunan veri name "+_users.userID.toString());
+          }
+        }
+        return allUser;
+      }
+
+  }
+
+  @override
+  Stream<List<Message>> getMessages(String currentUserID,String secondUserID) {
+   var snapShot=  _firestoreAuth.collection("chats").doc(currentUserID+"--"+secondUserID)
+    .collection("messages").orderBy("date",descending: true).snapshots();
+    return snapShot.map((messageList) => messageList.docs.map((message) => Message.fromMap(message.data())).toList());
+  // snapshot databaseden gelen mesajlar, mape cevirirken bi degiskene onu atayip messagemodelimi kullanarak modelliyoruz geriye ekranda
+    //gosterebilecegimiz bir liste donderiyor.
+
+  }
+
+  Future<bool> saveMessages(Message saveMessage) async{
+
+    var _messageID=_firestoreAuth.collection("chats").doc().id;
+    var _currentDocID= saveMessage.fromWho+'--'+saveMessage.toWho;
+    var _secondDocID=saveMessage.toWho+'--'+saveMessage.fromWho;
+    var _saveMessagetoMap=saveMessage.toMap();
+
+    _saveMessagetoMap.update("fromMe", (value) => true );
+    await _firestoreAuth.collection('chats')
+        .doc(_currentDocID)
+        .collection("messages")
+        .doc(_messageID)
+        .set(_saveMessagetoMap);
+
+    await _firestoreAuth.collection('chats').doc(_currentDocID).set({
+      "current_user": saveMessage.fromWho,
+      "second_user":saveMessage.toWho,
+      "secondUser_name":saveMessage.toWho_name,
+      "secondUser_profileURL":saveMessage.toWho_profileURL,
+      "last_message":saveMessage.message,
+      "created_date":FieldValue.serverTimestamp(),
+    });
+
+    _saveMessagetoMap.update("fromMe", (value) => false );
+    await _firestoreAuth.collection('chats')
+        .doc(_secondDocID)
+        .collection("messages")
+        .doc(_messageID)
+        .set(_saveMessagetoMap);
+    await _firestoreAuth.collection('chats').doc(_secondDocID).set({
+      "current_user": saveMessage.toWho,
+      "second_user":saveMessage.fromWho,
+      "last_message":saveMessage.message,
+      "created_date":FieldValue.serverTimestamp(),
+    });
+
+    return true;
+  }
+
+  @override
+  Future<List<MyChat>> getAllFriend(String userID) async{
+    QuerySnapshot querySnapshot=await _firestoreAuth.collection('chats').where('current_user',isEqualTo: userID)
+    .orderBy('created_date',descending: true).get();
+
+
+    List<MyChat> allFriend=[];
+    for(DocumentSnapshot docSnapshot in querySnapshot.docs){
+      MyChat _docSnapshot=MyChat.fromMap(docSnapshot.data());
+
+      allFriend.add(_docSnapshot);
+
+    }
+   return allFriend;
+  }
+
+
 }

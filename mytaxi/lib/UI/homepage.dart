@@ -4,9 +4,12 @@ import 'package:mytaxi/UI/addpost.dart';
 import 'package:mytaxi/UI/profile.dart';
 import 'package:mytaxi/UI/searchpost.dart';
 import 'package:mytaxi/UI/update.dart';
+import 'package:mytaxi/UI/users.dart';
 import 'package:mytaxi/app/alert_widget.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
+
+import 'dm.dart';
 
 class homePageView extends StatelessWidget{
    final user;
@@ -16,6 +19,22 @@ class homePageView extends StatelessWidget{
    return Scaffold(
     appBar: new AppBar(
       title: Text("myTaxi"),
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => Users())),
+            child: Icon(Icons.search_off_outlined,size: 26,),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => DMBox())),
+            child: Icon(Icons.message_outlined,size: 26,),
+          ),
+        ),
+      ],
     ),
      body: SingleChildScrollView(
 
@@ -164,7 +183,10 @@ class homePageView extends StatelessWidget{
              title: Text("UPDATE"),
            ),
            ListTile(
-             //onTap:() ,
+             onTap: ()=> Navigator.push(
+               context,
+               MaterialPageRoute(builder: (context) => Users()),
+             ),
              leading: SizedBox(
                height: 40.0,
                width: 40.0,
