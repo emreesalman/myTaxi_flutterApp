@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
+
 class searchPostView extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {

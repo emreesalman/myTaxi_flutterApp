@@ -8,6 +8,7 @@ import 'package:mytaxi/UI/users.dart';
 import 'package:mytaxi/app/alert_widget.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:mytaxi/UI/map.dart';
 
 import 'dm.dart';
 
@@ -185,7 +186,7 @@ class homePageView extends StatelessWidget{
            ListTile(
              onTap: ()=> Navigator.push(
                context,
-               MaterialPageRoute(builder: (context) => Users()),
+               MaterialPageRoute(builder: (context) => Map()),
              ),
              leading: SizedBox(
                height: 40.0,

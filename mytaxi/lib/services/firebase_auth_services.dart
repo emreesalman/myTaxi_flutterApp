@@ -59,16 +59,17 @@ class FirebaseAuthService implements AuthBase{
         return _userFromFirebase(_user.user);
 
   }
+
+
   @override
   Future<MyUser> signInWithEmailAndPassword(String email, String password)async {
-      var sonuc =await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      if(sonuc.user.emailVerified){
-        return _userFromFirebase(sonuc.user);
-      }
-      else{
-
-        return null;
-      }
+       var _user =await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+       if(_user.user.emailVerified){
+         return _userFromFirebase(_user.user);
+       }
+       else{
+         return null;
+       }
   }
 
   @override

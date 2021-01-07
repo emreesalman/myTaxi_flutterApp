@@ -1,6 +1,8 @@
 
+
 import 'package:mytaxi/model/dm_model.dart';
 import 'package:mytaxi/model/message_model.dart';
+import 'package:mytaxi/model/post_model.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/services/db_base.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,7 +67,8 @@ class FirestoreDBService implements DBBase{
     List<MyUser> allUser = [];
       int i=0;
 
-    QuerySnapshot usersFromUserName = await _firestoreAuth.collection("users").where("userName", isEqualTo: searchingUser).get();
+    QuerySnapshot usersFromUserName = await _firestoreAuth.collection("users").where('userName', isGreaterThanOrEqualTo: searchingUser).get();
+
       if(usersFromUserName.docs.length>0){
         for (DocumentSnapshot user in usersFromUserName.docs) {
           MyUser _user = MyUser.fromMap(user.data());
@@ -77,7 +80,7 @@ class FirestoreDBService implements DBBase{
         return allUser;
       }
       else{
-        QuerySnapshot usersFromName = await _firestoreAuth.collection("users").where("name", isEqualTo: searchingUser).get();
+        QuerySnapshot usersFromName = await _firestoreAuth.collection("users").where("name", isGreaterThanOrEqualTo: searchingUser).get();
         for (DocumentSnapshot users in usersFromName.docs) {
           MyUser _users = MyUser.fromMap(users.data());
           if (userID != _users.userID) {
@@ -99,6 +102,22 @@ class FirestoreDBService implements DBBase{
     //gosterebilecegimiz bir liste donderiyor.
 
   }
+  @override
+  Future<bool> savePost(MyPost post) async{
+    var postID= _firestoreAuth.collection('post').doc().id;
+    await _firestoreAuth.collection("posts").doc(postID).set(post.toMap());
+    await _firestoreAuth.collection("posts").doc(postID).update({
+      'postID':postID
+    });
+    await _firestoreAuth.collection('posts').doc(postID).collection('users').doc(post.userID).set(
+        {
+          'userID':post.userID,
+          "userName":post.userName,
+          'userProfileURL':post.userProfileURL,
+        });
+         return true;
+  }
+
 
   Future<bool> saveMessages(Message saveMessage) async{
 
@@ -155,5 +174,33 @@ class FirestoreDBService implements DBBase{
    return allFriend;
   }
 
+  @override
+  Future<List<MyPost>> getPosts(String userID, MyPost post) async{
+    QuerySnapshot querySnapshot=await _firestoreAuth.collection('posts').where('status',isEqualTo: true).where('date',isEqualTo: post.date)
+        .where('startLocation',isEqualTo: post.startLocation).where('endLocation',isEqualTo: post.endLocation).orderBy('date',descending: true).get();
+    List<MyPost> allPost=[];
+    for(DocumentSnapshot documentSnapshot in querySnapshot.docs){
+      MyPost _post=MyPost.fromMap(documentSnapshot.data());
+      if(userID!=_post.userID){
+        allPost.add(_post);
+      }
+    }
+    return allPost;
+  }
 
+  @override
+  Future<bool> joinPost(String userID, String userName, String profileURL, String postID) async{
+   await _firestoreAuth.collection('posts').doc(postID).collection('users').add({
+     'userID':userID,
+     'userName':userName,
+     'profileURL':profileURL
+   });
+   QuerySnapshot temp= await _firestoreAuth.collection('posts').doc(postID).collection('users').get();
+    if(temp.docs.length>3){
+      await _firestoreAuth.collection('posts').doc(postID).update({
+        'status':false
+      });
+    }
+    return true;
+  }
 }

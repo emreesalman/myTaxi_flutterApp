@@ -6,6 +6,7 @@ import 'package:mytaxi/services/auth_base.dart';
 import 'package:mytaxi/services/firebase_auth_services.dart';
 import 'package:mytaxi/services/firebase_storage_services.dart';
 import 'package:mytaxi/services/firestore_db_service.dart';
+import 'package:mytaxi/model/post_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 
@@ -87,7 +88,11 @@ class UserRepository implements AuthBase {
       }
     }
   }
+
+
   String get error=>_error;
+
+
   @override
   Future<MyUser> signInWithEmailAndPassword(String email,
       String password) async {
@@ -186,6 +191,14 @@ class UserRepository implements AuthBase {
       return null;
     } else {
       return await _firebaseAuthService.forgetPassword(email);
+    }
+  }
+  Future<bool> savePost(MyPost post) async {
+    if (appMode == AppMode.DEBUG) {
+      print("appMode debug modda herhangi bir database yok=forgetPassword");
+      return null;
+    } else {
+      return await _firestoreDBService.savePost(post);
     }
   }
 }

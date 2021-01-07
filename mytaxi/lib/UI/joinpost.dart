@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+
 
 class joinPostView extends StatelessWidget{
   @override

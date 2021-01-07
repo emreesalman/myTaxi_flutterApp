@@ -9,6 +9,7 @@ import 'file:///C:/Users/Emre/Desktop/myTaxi/mytaxi/lib/app/locator.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/repository/user_repository.dart';
 import 'package:mytaxi/services/auth_base.dart';
+import 'package:mytaxi/model/post_model.dart';
 
 enum ViewState{Idle,Busy}
 
@@ -167,6 +168,9 @@ class UserModel extends ChangeNotifier implements AuthBase {
   @override
   Future<bool> forgetPassword(String email) async {
     return await _userRepository.forgetPassword(email);
+  }
+  Future<bool> savePost(MyPost post) async {
+    return await _userRepository.savePost(post);
   }
 
 }

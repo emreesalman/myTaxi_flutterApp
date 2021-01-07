@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
+import 'package:mytaxi/app/alert_widget.dart';
+import 'package:mytaxi/model/user_model.dart';
+import 'package:mytaxi/viewmodel/user_view_model.dart';
+import 'package:provider/provider.dart';
+import 'package:mytaxi/model/post_model.dart';
 
 class addPostView extends StatefulWidget{
   @override
@@ -10,8 +15,11 @@ class addPostView extends StatefulWidget{
   }
 }
 class AddPostState extends State<addPostView>{
+
   int _kisiSayisi;
   String _tarih,_saat;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +94,22 @@ class AddPostState extends State<addPostView>{
       ),
     );
   }
-  void _addPost(){
-    //DateBase Yazma islemleri
+  void _addPost()async{
+    final _userModel=Provider.of<UserModel>(context,listen: false);
+    MyUser _user= await _userModel.currentUser();
+    String _userID= _user.userID;
+    String _starLocation='Bahcesehir';
+    String _endLocation='avcilar';
+      MyPost _post = MyPost(userName: _userModel.user.userName,userID: _userID, startLocation: _starLocation,
+          endLocation: _endLocation, date: _tarih,
+          time: _saat, peopleCount: _kisiSayisi,userProfileURL: _userModel.user.profileURL);
+      bool sonuc= await _userModel.savePost(_post);
+      if(sonuc){
+        AlertDialogWidget(
+          baslik: 'Ilan Basarili',
+          icerik: 'Ilan basariyla yayinlandi',
+          buttonText: 'Tamam',
+        ).show(context);
+      }
   }
 }

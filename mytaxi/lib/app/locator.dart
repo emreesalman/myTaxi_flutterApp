@@ -5,6 +5,7 @@ import 'package:mytaxi/services/firebase_storage_services.dart';
 import 'package:mytaxi/services/firestore_db_service.dart';
 
 GetIt locator=GetIt.instance;
+
 void setupLocator(){
   locator.registerLazySingleton(() => FirebaseAuthService());
   locator.registerLazySingleton(() => UserRepository());
