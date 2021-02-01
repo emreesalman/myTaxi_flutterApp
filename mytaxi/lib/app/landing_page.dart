@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mytaxi/UI/homepage.dart';
+import 'package:mytaxi/UI/homepage_tab.dart';
 import 'package:mytaxi/UI/login.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class LandingPage extends StatelessWidget {
         return loginPageView();
       }else{
         print("Oturum Acan User "+_userModel.user.userID.toString());
-        return homePageView(user: _userModel.user);
+        return HomePageTab();
       }
     }else{
       return Scaffold(

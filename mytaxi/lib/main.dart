@@ -11,7 +11,7 @@ void main()async{
   await Firebase.initializeApp();
   setupLocator();
   runApp(ChangeNotifierProvider(
-      create: (_)=>UserModel(),
+      create: (context)=>UserModel(),
       child: App()));
 }
 

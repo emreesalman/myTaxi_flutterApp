@@ -25,6 +25,7 @@ class _ChatState extends State<Chat> {
     final _userModel=Provider.of<UserModel>(context);
     MyUser _currentUser=widget.currentUser;
     MyUser _secondUser=widget.secondUser;
+
     ScrollController _scrollController= new ScrollController();
 
     return Scaffold(

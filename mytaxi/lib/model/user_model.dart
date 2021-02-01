@@ -17,7 +17,7 @@ class MyUser{
     'lastName': lastName ?? '',
     'email': email,
     'phoneNumber': phoneNumber ?? '',
-    'profileURL' : profileURL ?? 'https://firebasestorage.googleapis.com/v0/b/mytaxi-6e782.appspot.com/o/p441ooUAFZMAIZmzzxjXTJyLH5f1%2Fprofil_foto%2Fprofil_foto.png?alt=media&token=0f4d7cec-fa6b-4407-b8ee-701e87730f1c',
+    'profileURL' : profileURL ?? 'https://firebasestorage.googleapis.com/v0/b/mytaxi-6e782.appspot.com/o/yVTnQZixyqNG2imMkcSjwhvOAMv1%2Fprofil_foto%2Fprofil_foto.png?alt=media&token=13f67b9a-da7c-47ec-b930-b37e42d58fe1',
     'createdAt': createdAt ?? FieldValue.serverTimestamp(),
     'updatedAt': updatedAt?? FieldValue.serverTimestamp(),
   };
@@ -38,7 +38,9 @@ class MyUser{
   String toString() {
     return 'MyUser{userID: $userID,userName:$userName, name: $name, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, profileURL: $profileURL, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
+
   MyUser.data({@required this.userID,@required this.userName,@required this.profileURL,});
+
   String randomNumber(){
     int randomSayi =Random().nextInt(9999999);
     return randomSayi.toString();

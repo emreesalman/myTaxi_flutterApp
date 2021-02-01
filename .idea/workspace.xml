@@ -1,23 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="acd21edb-285d-4c15-8309-25f57a55fc27" name="Default Changelist" comment="" />
+    <list default="true" id="acd21edb-285d-4c15-8309-25f57a55fc27" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/mytaxi/assets/icons/google.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/assets/icons/mail_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/assets/images/background.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/assets/images/taxi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/assets/images/taxi_icon.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/lib/UI/homepage_tab.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/lib/UI/my_posts.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/lib/app/custom_bottom_navbar.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/lib/app/raised_button.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mytaxi/lib/app/tab_items.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/myTaxi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/myTaxi.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/addpost.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/addpost.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/chat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/chat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/dm.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/dm.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/homepage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/homepage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/joinpost.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/joinpost.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/searchpost.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/searchpost.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/sign_in_with_email_and_password.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/sign_in_with_email_and_password.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/UI/signup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/UI/signup.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/app/landing_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/app/landing_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/model/post_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/model/post_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/model/user_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/model/user_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/repository/user_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/repository/user_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/services/firestore_db_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/services/firestore_db_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/lib/viewmodel/user_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/lib/viewmodel/user_view_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytaxi/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/mytaxi/pubspec.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1kN8Ga9ArAp3NhmLLO0AR3W4q2B" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/mytaxi" />
     <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -39,10 +76,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1605529893143" />
-    <state x="548" y="167" key="FileChooserDialogImpl" timestamp="1605529835882">
+    <state x="548" y="167" key="FileChooserDialogImpl" timestamp="1611832110629">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="548" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1605529835882" />
+    <state x="548" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1611832110629" />
     <state x="231" y="0" key="SettingsEditor" timestamp="1605873449030">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

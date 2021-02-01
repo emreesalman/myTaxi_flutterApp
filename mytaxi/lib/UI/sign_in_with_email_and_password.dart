@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mytaxi/app/alert_widget.dart';
+import 'package:mytaxi/app/raised_button.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +31,8 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
         else{
           showDialog(context: context,builder: (context){
             return AlertDialogWidget(
-              baslik: "Kullanici Giris Yaparken Hata!",
-              icerik: 'Kullanici Bulunamadi veya Hatali Email veya Sifre',
+              baslik: "Kullanıcı Giriş Yaparken Hata Oluştu !",
+              icerik: 'Kullanıcı Bulunamadı veya Hatalı E-Mail/Şifre',
               buttonText: "Tamam",
             );
           });
@@ -43,15 +44,15 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
         final _userModel=Provider.of<UserModel>(context,listen: false);
         _userModel.state=ViewState.Idle;
         return AlertDialogWidget(
-          baslik: 'Giris Yaparken Hata Olustu',
+          baslik: 'Giriş Yaparken Hata Oluştu',
           icerik: e.message.toString(),
           buttonText: 'Tamam',
         ).show(context);
       }
     }else{
       AlertDialogWidget(
-        baslik: 'Giris Yaparken Hata Olustu',
-        icerik: "Alanlar Bos Gecilemez",
+        baslik: 'Giriş Yaparken Hata Oluştu',
+        icerik: "Alanlar Boş Geçilemez",
         buttonText: 'Tamam',
       ).show(context);
     }
@@ -61,49 +62,87 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
   Widget build(BuildContext context) {
     final _userModel=Provider.of<UserModel>(context,listen: true);
     return Scaffold(
-      appBar: AppBar(title: Text("Giris Yap"),),
-      body:_userModel.state==ViewState.Idle ? Padding(padding: EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height:10),
-              TextFormField(
-                controller: _controlEmail,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  errorText: _userModel.emailErrorMessage !=null ? _userModel.emailErrorMessage:null,
-                  prefixIcon: Icon(Icons.mail),
-                  hintText: "E-Mail Adresiniz",
-                  labelText: "E-Mail",
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (deger)=>_email=deger,
-              ),
-              SizedBox(height:10),
-              TextFormField(
-                obscureText: true,
-                controller: _controlPassword,
-                decoration: InputDecoration(
-                  errorText: _userModel.passwordErrorMessage !=null ? _userModel.passwordErrorMessage:null,
-                  prefixIcon: Icon(Icons.lock),
-                  hintText: "Sifreniz",
-                  labelText: "Sifre",
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (deger)=>_password=deger,
-              ),
-              RaisedButton(onPressed:()=>_formSubmit(context),
-                child: Text("Giris Yap"),
-              ),
-              RaisedButton(onPressed:()=>_forgetPasswordDialog(context),
-                child: Text("Sifremi Unuttum"),
-              ),
-            ],
-          ),
-        ),
-      ):Center(child: CircularProgressIndicator(),),
+      backgroundColor: Colors.blue,
+      appBar: AppBar(title: Text("Giriş Yap",textAlign: TextAlign.center,),),
+      body:_userModel.state==ViewState.Idle ?
+      Padding(padding: EdgeInsets.only(left: 20,right: 20,top:0),
+          child:Form(
+                key: _formKey,
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      child: Stack(
+                        children:<Widget>[
+                          Container(
+                              padding:EdgeInsets.fromLTRB(15.0, 90.0, 0.0, 0.0),
+                              child: Text("HOŞ",style: TextStyle(fontSize: 60,color: Colors.white,fontWeight: FontWeight.bold ),)
+                          ),
+                          Container(
+                              padding:EdgeInsets.fromLTRB(20.0, 152.0, 0.0, 0.0),
+                              child: Text("-geldiniz",style: TextStyle(fontSize: 55,color: Colors.white,),)
+                          ),
 
+                        ],
+                      )
+                    ),
+                    SizedBox(height:10),
+                    TextFormField(
+                      controller: _controlEmail,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        errorText: _userModel.emailErrorMessage !=null ? _userModel.emailErrorMessage:null,
+                        prefixIcon: Icon(Icons.mail,color: Colors.black,),
+                        hintText: "E-Mail Adresiniz",
+                        labelText: "E-Mail",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black,width: 5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black,width: 5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onSaved: (deger)=>_email=deger,
+                    ),
+                    SizedBox(height:10),
+                    TextFormField(
+                      obscureText: true,
+                      controller: _controlPassword,
+                      decoration: InputDecoration(
+                        errorText: _userModel.passwordErrorMessage !=null ? _userModel.passwordErrorMessage:null,
+                        prefixIcon: Icon(Icons.lock,color: Colors.black,),
+                        hintText: "Şireniz",
+                        labelText: "Şifre",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black,width: 5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black,width: 5),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onSaved: (deger)=>_password=deger,
+                    ),
+                    SizedBox(height:22),
+                    MyButton(buttonText:"Giriş Yap",
+                      textColor: Colors.black,
+                      buttonColor: Colors.yellow,
+                      onPressed:()=>_formSubmit(context),
+                      buttonIcon: Icon(Icons.login_sharp),
+                    ),
+
+                    MyButton(buttonText:"Şifremi Unuttum",
+                      textColor: Colors.black,
+                      buttonColor: Colors.lightBlueAccent,
+                      onPressed:()=>_forgetPasswordDialog(context),
+                      buttonIcon: Icon(Icons.replay_circle_filled),
+                    ),
+                  ],
+                ),
+              ),
+      ):Center(child: CircularProgressIndicator(),),
     );
   }
   void _forgetPasswordDialog(BuildContext context) {
@@ -112,7 +151,7 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
       final _userModel=Provider.of<UserModel>(context,listen: true);
       bool sonuc;
       return Container(
-        height: 600,
+        height: 500,
         child: Column(
           children: [
             Padding(
@@ -120,8 +159,8 @@ class EmailAndPasswordLoginState extends State<signInWithEmailAndPassword>{
               child: TextFormField(
                 controller: _controlEmail ,
                 decoration: InputDecoration(
-                  labelText: "e-Mail Adresiniz",
-                  hintText: "e-Mail",
+                  labelText: "E-Mail Adresiniz",
+                  hintText: "E-Mail",
                   border: OutlineInputBorder(),
                 ),
               ),

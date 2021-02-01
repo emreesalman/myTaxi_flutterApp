@@ -141,11 +141,6 @@ class UserModel extends ChangeNotifier implements AuthBase {
     return sonuc;
   }
 
-  Future<bool> updateUserEmail(String userID, String newEmail) async {
-    var sonuc = await _userRepository.updateUserEmail(userID, newEmail);
-    return sonuc;
-  }
-
   Future<String> uploadFile(String userID, String fileType,
       File profileImage) async {
     var link = await _userRepository.uploadFile(userID, fileType, profileImage);
@@ -171,6 +166,25 @@ class UserModel extends ChangeNotifier implements AuthBase {
   }
   Future<bool> savePost(MyPost post) async {
     return await _userRepository.savePost(post);
+  }
+  Future<List<MyPost>> getPosts(String userID, MyPost post) async{
+    return await _userRepository.getPosts(userID, post);
+  }
+  Future<bool> joinPost(String userID, String userName, String profileURL, String postID) async{
+    return await _userRepository.joinPost(userID, userName, profileURL, postID);
+  }
+
+  @override
+  Future<bool> updateEmail(String email, String newEmail, String password,String userID) async {
+   return await _userRepository.updateEmail(email, newEmail, password, userID);
+  }
+
+  @override
+  Future<bool> updatePassword(String email, String password, String newPassword) async {
+    return await _userRepository.updatePassword(email, password, newPassword);
+  }
+  Future<List<MyPost>> userPosts(String userID) async{
+    return await _userRepository.userPosts(userID);
   }
 
 }

@@ -79,7 +79,7 @@ class UserRepository implements AuthBase {
       _user.lastName = lastName;
       _user.phoneNumber = phone;
       bool sonuc = await _firestoreDBService.saveUser(_user);
-      if (sonuc = true) {
+      if (sonuc == true) {
         print("Firestore Kayit basarili");
         return await _firestoreDBService.readUser(_user.userID);
       } else {
@@ -125,14 +125,6 @@ class UserRepository implements AuthBase {
     }
   }
 
-  Future<bool> updateUserEmail(String userID, String newEmail) async {
-    if (appMode == AppMode.DEBUG) {
-      print("appMode debug modda herhangi bir database yok=updateUserEmail");
-      return false;
-    } else {
-      return await _firestoreDBService.updateUserEmail(userID, newEmail);
-    }
-  }
 
   Future<String> uploadFile(String userID, String fileType,
       File profileImage) async {
@@ -201,5 +193,56 @@ class UserRepository implements AuthBase {
       return await _firestoreDBService.savePost(post);
     }
   }
+  Future<List<MyPost>> getPosts(String userID, MyPost post) async{
+    if (appMode == AppMode.DEBUG) {
+      print("appMode debug modda herhangi bir database yok=saveMessage");
+      return null;
+    } else {
+      return await _firestoreDBService.getPosts(userID, post);
+    }
+  }
+  Future<bool> joinPost(String userID, String userName, String profileURL, String postID) async{
+    if (appMode == AppMode.DEBUG) {
+      print("appMode debug modda herhangi bir database yok=saveMessage");
+      return null;
+    } else {
+      return await _firestoreDBService.joinPost(userID, userName, profileURL, postID);
+    }
+  }
+
+  @override
+  Future<bool> updateEmail(String email, String newEmail, String password,String userID) async{
+    if (appMode == AppMode.DEBUG) {
+      print("appMode debug modda herhangi bir database yok=updateUserEmail");
+      return false;
+    } else {
+      bool sonuc=await _firebaseAuthService.updateEmail(email, newEmail, password, userID);
+      if(sonuc==true){
+        await _firestoreDBService.updateUserEmail(userID, newEmail);
+      }
+      else{
+        return false;
+      }
+    }
+  }
+
+  @override
+  Future<bool> updatePassword(String email, String password, String newPassword)  async{
+    if (appMode == AppMode.DEBUG) {
+      print("appMode debug modda herhangi bir database yok=updateUserEmail");
+      return false;
+    } else {
+      return await _firebaseAuthService.updatePassword(email, password, newPassword);
+    }
+  }
+  Future<List<MyPost>> userPosts(String userID) async{
+    if (appMode == AppMode.DEBUG) {
+      print("appMode debug modda herhangi bir database yok=updateUserEmail");
+      return null;
+    } else {
+      return await _firestoreDBService.userPosts(userID);
+    }
+  }
+
 }
 

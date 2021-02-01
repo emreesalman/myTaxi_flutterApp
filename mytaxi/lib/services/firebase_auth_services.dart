@@ -84,5 +84,47 @@ class FirebaseAuthService implements AuthBase{
 
   }
 
+  @override
+  Future<bool> updateEmail(String email, String newEmail, String password,String userID) async{
+    try{
+      await _firebaseAuth.currentUser.updateEmail(newEmail);
+      print("E-Mail degisti");
+      return true;
+    }on FirebaseAuthException catch(e){
+      try{
+        //kullanıcı uzun sure oturum açmdadı tekrar giremesini istiyoruz
+        EmailAuthCredential credential=EmailAuthProvider.credential(email: email, password: password);
+        await FirebaseAuth.instance.currentUser.reauthenticateWithCredential(credential);
+        await _firebaseAuth.currentUser.updateEmail(newEmail);
+        print("Mailinizi onayladiktan sonra yeni e-mailiniz ile tekrar giris yapmaniz gerekiyor email değişti");
+        return true;
+      }catch(e){
+        print("Hata oluştu $e");
+        return false;
+      }
+    }
+  }
+
+  @override
+  Future<bool> updatePassword(String email, String password, String newPassword) async{
+    try{
+      await _firebaseAuth.currentUser.updatePassword(newPassword);
+      return true;
+    }on FirebaseAuthException catch(e){
+      try{
+        EmailAuthCredential credential=EmailAuthProvider.credential(email: email, password: password);
+        await FirebaseAuth.instance.currentUser.reauthenticateWithCredential(credential);
+        await _firebaseAuth.currentUser.updatePassword(newPassword);
+        print("şifre değişti");
+        return true;
+
+      }catch(e){
+        print("Hata oluştu $e");
+        return false;
+      }
+    }
+  }
+
+
 
 }

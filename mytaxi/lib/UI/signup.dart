@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mytaxi/app/alert_widget.dart';
 import 'package:mytaxi/app/errors.dart';
+import 'package:mytaxi/app/raised_button.dart';
 import 'package:mytaxi/model/user_model.dart';
 import 'package:mytaxi/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -42,28 +43,47 @@ class SignUpState extends State<SignUpView>{
   Widget build(BuildContext context) {
     final _userModel=Provider.of<UserModel>(context,listen: false);
    return Scaffold(
-     appBar: AppBar(title: Text("Giris Yap"),),
-     body:Padding(padding: EdgeInsets.all(20),
+     backgroundColor: Colors.blue,
+     appBar: AppBar(title: Text(""),),
+     body:Padding(padding: EdgeInsets.only(left: 20,right: 20,top: 50),
          child: Form(
            key: _formSignUpKey,
          child: ListView(
            children: <Widget>[
+             Padding(
+               padding: const EdgeInsets.only(left: 30,bottom: 23,top: 0),
+               child: Text("Kayıt Ol",style: TextStyle(fontSize: 35,color: Colors.white,fontWeight: FontWeight.bold),),
+             ),
              TextFormField(
                decoration: InputDecoration(
-                 prefixIcon: Icon(Icons.account_circle),
+                 prefixIcon: Icon(Icons.account_circle,color: Colors.black,),
                  hintText: "Adiniz",
                  labelText: "Ad",
-                 border: OutlineInputBorder(),
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
                ),
                onSaved: (deger)=>_ad=deger,
              ),
              SizedBox(height:10),
              TextFormField(
                decoration: InputDecoration(
-                 prefixIcon: Icon(Icons.account_circle),
+                 prefixIcon: Icon(Icons.account_circle,color: Colors.black,),
                  hintText: "Soyadiniz",
                  labelText: "Soyad",
-                 border: OutlineInputBorder(),
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
                ),
 
                onSaved: (deger)=>_soyad=deger,
@@ -72,10 +92,17 @@ class SignUpState extends State<SignUpView>{
              TextFormField(
                keyboardType: TextInputType.number,
                decoration: InputDecoration(
-                 prefixIcon: Icon(Icons.phone),
+                 prefixIcon: Icon(Icons.phone,color: Colors.black,),
                  hintText: "Telefon Numaraniz",
                  labelText: "Telefon Numarasi",
-                 border: OutlineInputBorder(),
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
                ),
 
                 onSaved:(deger)=>_telefon=deger,
@@ -85,10 +112,17 @@ class SignUpState extends State<SignUpView>{
                keyboardType: TextInputType.emailAddress,
                decoration: InputDecoration(
                  errorText: _userModel.emailErrorMessage !=null ?_userModel.emailErrorMessage:null,
-                 prefixIcon: Icon(Icons.mail),
+                 prefixIcon: Icon(Icons.mail,color: Colors.black,),
                  hintText: "E-Mail Adresiniz",
                  labelText: "E-Mail",
-                 border: OutlineInputBorder(),
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
                ),
                onSaved: (deger)=>_email=deger,
              ),
@@ -97,17 +131,28 @@ class SignUpState extends State<SignUpView>{
                obscureText: true,
                decoration: InputDecoration(
                  errorText: _userModel.passwordErrorMessage !=null ?_userModel.passwordErrorMessage:null,
-                 prefixIcon: Icon(Icons.lock),
+                 prefixIcon: Icon(Icons.lock,color: Colors.black,),
                  hintText: "Sifreniz",
                  labelText: "Sifre",
-                 border: OutlineInputBorder(),
+                 border: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
+                 focusedBorder: OutlineInputBorder(
+                   borderSide: BorderSide(color: Colors.black,width: 5),
+                   borderRadius: BorderRadius.circular(20),
+                 ),
                ),
                onSaved: (deger)=>_password=deger,
              ),
-             RaisedButton(onPressed:(){
-               _formSubmit(context);
-             },
-               child: Text("Kayit Ol"),
+             SizedBox(height:20),
+             MyButton(buttonText:"Kayıt Ol",
+               textColor: Colors.black,
+               buttonColor: Colors.yellowAccent,
+               onPressed:(){
+                 _formSubmit(context);
+               },
+               buttonIcon: Icon(Icons.supervised_user_circle),
              ),
            ],
          ),

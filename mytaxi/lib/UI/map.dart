@@ -1,13 +1,13 @@
 
-
 import 'dart:async';
-
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart';
+import 'package:mytaxi/app/raised_button.dart';
+
 
 
 class Map extends StatefulWidget {
@@ -19,34 +19,33 @@ class _MapState extends State<Map> {
   static const LatLng _center = const LatLng(39.0014668, 30.6872574);
   GoogleMapController myController;
   String searchAddr;
-
+  LatLng _location;
   Position _currentPosition;
+
   var geoLocator=Geolocator();
   Completer<GoogleMapController> _completerGoogleMap=Completer();
-
   void localePosition() async{
     Position position= await Geolocator.getCurrentPosition();
     _currentPosition=position;
     LatLng latLngPosition=LatLng(position.latitude,position.longitude);
-    CameraPosition cameraPosition=new CameraPosition(target: latLngPosition,zoom: 500);
-    debugPrint(latLngPosition.toString());
-    myController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-
-
+    _location=LatLng(position.latitude,position.longitude);
+    cameraPositon(latLngPosition);
   }
+
+  List<Marker> myMarker=[];
 
   @override
   Widget build(BuildContext context) {
-  var temp=localePosition();
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height-100,
+            height: MediaQuery.of(context).size.height,
             width: double.infinity,
             child: GoogleMap(
-              myLocationButtonEnabled: true,padding: EdgeInsets.only(top: 265),
+              myLocationButtonEnabled: true,padding: EdgeInsets.only(top: 430),
               onMapCreated: onMapCreaded,
+              mapToolbarEnabled: false,
               myLocationEnabled: true,
               zoomControlsEnabled: true,
               zoomGesturesEnabled: true,
@@ -54,6 +53,9 @@ class _MapState extends State<Map> {
                 target:_center,
                 zoom: 6.0,
               ),
+              mapType: MapType.hybrid,
+              markers: Set.from(myMarker),
+              onTap: _handleTap,
             ),
           ),
           Positioned(
@@ -85,7 +87,22 @@ class _MapState extends State<Map> {
                 },
               ),
             ),
-          )
+        ),
+          Positioned(
+          bottom: 30.0,
+          right: 75.0,
+          left: 75.0,
+            child:MyButton(
+              textColor: Colors.black,
+              buttonColor: Colors.yellow,
+              onPressed: (){
+                Navigator.pop(context,_location);
+              },
+              buttonIcon: Icon(Icons.where_to_vote_sharp),
+              buttonText: "Konumu Seç",
+            ),
+
+          ),
         ],
       ),
     );
@@ -98,13 +115,34 @@ class _MapState extends State<Map> {
   }
 
   void searchNavigate() {
-
     locationFromAddress(searchAddr).then((result){
       myController.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(
               target:
               LatLng(result[0].latitude, result[0].longitude),
-              zoom: 15.0)));
+              zoom: 20.0)));
     });
   }
+
+  void _handleTap(LatLng tappedPoint) {
+    setState(() {
+      myMarker=[];
+      myMarker.add(
+        Marker(
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          markerId:MarkerId(tappedPoint.toString()) ,
+          position: tappedPoint,
+        ),
+      );
+      _location=tappedPoint;
+      cameraPositon(tappedPoint);
+      print(_location);
+      print(_location.longitude+10);
+    });
+  }
+  void cameraPositon (LatLng targetP){
+    CameraPosition cameraPosition=new CameraPosition(target: targetP,zoom: 18);
+    myController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+}
 }

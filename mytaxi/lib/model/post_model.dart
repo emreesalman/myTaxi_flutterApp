@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyPost{
   String postID;
@@ -9,13 +10,19 @@ class MyPost{
   String postTitle;
   String postMessage;
   DateTime createdAt;
-  final String startLocation,endLocation;
+  String starAdress;
+  String endAdress;
+  final double startLocationLat,startLocationLong,endLocationLat,endLocationLong;
   final String time;
   final String date;
   final int peopleCount;
   bool status;
+
   MyPost({this.postID,this.userID,this.userName,this.userProfileURL, this.postTitle, this.postMessage, this.createdAt,
-  @required this.startLocation,@required this.endLocation,@required this.date, @required this.time,@required this.peopleCount,this.status});
+    this.starAdress,this.endAdress,
+  @required this.startLocationLat,@required this.startLocationLong,
+    @required this.endLocationLat,@required this.endLocationLong,
+    @required this.date, @required this.time,@required this.peopleCount,this.status});
 
   Map<String,dynamic> toMap(){
     return {
@@ -26,8 +33,12 @@ class MyPost{
       'postTitle':postTitle ?? 'myTaxi Uygulamasi Ile Yolculuk',
       'postMessage':postMessage ?? 'myTaxi Uygulamasi Sayesinde Rahat ve Hesapli Ulasim',
       'createdAt':createdAt ?? FieldValue.serverTimestamp(),
-      'startLocation':startLocation,
-      'endLocation':endLocation,
+      'starAdress':starAdress,
+      'endAdress':endAdress,
+      'startLocationLat':startLocationLat,
+      'startLocationLong':startLocationLong,
+      'endLocationLat':endLocationLat,
+      'endLocationLong':endLocationLong,
       'date':date,
       'time':time,
       'peopleCount':peopleCount,
@@ -42,9 +53,12 @@ class MyPost{
         userProfileURL=map['userProfileURL'],
         postTitle=map['postTitle'],
         postMessage=map['postMessage'],
-        createdAt=map['createdAt'],
-        startLocation=map['startLocation'],
-        endLocation=map['endLocation'],
+        startLocationLat=map['startLocationLat'],
+        startLocationLong=map['startLocationLong'],
+        endLocationLat=map['endLocationLat'],
+        endLocationLong=map['endLocationLong'],
+        starAdress=map['starAdress'],
+        endAdress=map['endAdress'],
         time=map['time'],
         date=map['date'],
         peopleCount=map['peopleCount'],
@@ -52,6 +66,6 @@ class MyPost{
 
   @override
   String toString() {
-    return 'MyPost{postID: $postID, userID: $userID, userName: $userName, userProfileURL: $userProfileURL, postTitle: $postTitle, postMessage: $postMessage, createdAt: $createdAt, startLocation: $startLocation, endLocation: $endLocation, time: $date,time: $time, peopleCount: $peopleCount, status: $status}';
+    return 'MyPost{postID: $postID, userID: $userID, userName: $userName, userProfileURL: $userProfileURL, postTitle: $postTitle, postMessage: $postMessage, starAdress: $starAdress, endAdress: $endAdress, startLocationLat: $startLocationLat, startLocationLong: $startLocationLong, endLocationLat: $endLocationLat, endLocationLong: $endLocationLong, time: $time, date: $date, peopleCount: $peopleCount, status: $status}';
   }
 }

@@ -30,5 +30,6 @@ abstract class DBBase {
   Future<List<MyPost>> getPosts(String userID,MyPost post);
 
   Future<bool> joinPost(String userID,String userName,String profileURL,String postID);
+  Future<List<MyPost>> userPosts(String userID);
 
 }

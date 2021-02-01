@@ -52,12 +52,17 @@ dev_dependencies:
   google_maps_flutter: ^1.0.6
   geocoding: ^1.0.5
   location: ^3.2.1
+  geocoder: ^0.2.1
 # The following section is specific to Flutter.
 flutter:
   assets:
+  - assets/icons/google.jpg
+  - assets/icons/mail_icon.png
   - assets/icons/icon_addButton.jpg
   - assets/icons/icon_searchButton.jpg
-  - assets/icons/icon_taxi.jpg
+  - assets/images/background.jpeg
+  - assets/images/taxi.png
+  - assets/images/taxi_icon.jpg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

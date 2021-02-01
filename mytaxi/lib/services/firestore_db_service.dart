@@ -1,5 +1,5 @@
 
-
+import 'package:flutter/cupertino.dart';
 import 'package:mytaxi/model/dm_model.dart';
 import 'package:mytaxi/model/message_model.dart';
 import 'package:mytaxi/model/post_model.dart';
@@ -48,14 +48,9 @@ class FirestoreDBService implements DBBase{
 
   @override
   Future<bool> updateUserEmail(String userID, String newEmail) async{
-   var users=await _firestoreAuth.collection("users").where("email",isEqualTo: newEmail).get();
-   if(users.docs.length>=1){
-     return false;
-   }else{
      await _firestoreAuth.collection("users").doc(userID).update({'email':newEmail});
      return true;
-     //buraya firebase kullanici changemaili gelecek..
-   }
+
   }
   Future<bool> updateProfilFoto(String userID,String profilFotoUrl)async{
     await _firestoreAuth.collection("users").doc(userID).update({'profileURL':profilFotoUrl});
@@ -93,15 +88,6 @@ class FirestoreDBService implements DBBase{
 
   }
 
-  @override
-  Stream<List<Message>> getMessages(String currentUserID,String secondUserID) {
-   var snapShot=  _firestoreAuth.collection("chats").doc(currentUserID+"--"+secondUserID)
-    .collection("messages").orderBy("date",descending: true).snapshots();
-    return snapShot.map((messageList) => messageList.docs.map((message) => Message.fromMap(message.data())).toList());
-  // snapshot databaseden gelen mesajlar, mape cevirirken bi degiskene onu atayip messagemodelimi kullanarak modelliyoruz geriye ekranda
-    //gosterebilecegimiz bir liste donderiyor.
-
-  }
   @override
   Future<bool> savePost(MyPost post) async{
     var postID= _firestoreAuth.collection('post').doc().id;
@@ -175,9 +161,29 @@ class FirestoreDBService implements DBBase{
   }
 
   @override
+  Stream<List<Message>> getMessages(String currentUserID,String secondUserID) {
+    var snapShot=  _firestoreAuth.collection("chats").doc(currentUserID+"--"+secondUserID)
+        .collection("messages").orderBy("date",descending: true).snapshots();
+    return snapShot.map((messageList) => messageList.docs.map((message) => Message.fromMap(message.data())).toList());
+    // snapshot databaseden gelen mesajlar, mape cevirirken bi degiskene onu atayip messagemodelimi kullanarak modelliyoruz geriye ekranda
+    //gosterebilecegimiz bir liste donderiyor.
+
+  }
+  @override
+  Future<List<MyPost>> userPosts(String userID) async{
+    QuerySnapshot querySnapshot=await _firestoreAuth.collection('posts').where('userID',isEqualTo: userID).get();
+    List<MyPost> userPosts=[];
+    for(DocumentSnapshot documentSnapshot in querySnapshot.docs){
+      MyPost _userPosts=MyPost.fromMap(documentSnapshot.data());
+      userPosts.add(_userPosts);
+    }
+    return userPosts;
+  }
+
+  @override
   Future<List<MyPost>> getPosts(String userID, MyPost post) async{
-    QuerySnapshot querySnapshot=await _firestoreAuth.collection('posts').where('status',isEqualTo: true).where('date',isEqualTo: post.date)
-        .where('startLocation',isEqualTo: post.startLocation).where('endLocation',isEqualTo: post.endLocation).orderBy('date',descending: true).get();
+    QuerySnapshot querySnapshot=await _firestoreAuth.collection('posts').where('date',isEqualTo: post.date).get();
+
     List<MyPost> allPost=[];
     for(DocumentSnapshot documentSnapshot in querySnapshot.docs){
       MyPost _post=MyPost.fromMap(documentSnapshot.data());
@@ -188,19 +194,37 @@ class FirestoreDBService implements DBBase{
     return allPost;
   }
 
+
+
   @override
   Future<bool> joinPost(String userID, String userName, String profileURL, String postID) async{
-   await _firestoreAuth.collection('posts').doc(postID).collection('users').add({
-     'userID':userID,
-     'userName':userName,
-     'profileURL':profileURL
-   });
-   QuerySnapshot temp= await _firestoreAuth.collection('posts').doc(postID).collection('users').get();
+    QuerySnapshot users=await _firestoreAuth.collection('posts').doc(postID).collection('users').get();
+    List<MyPost> allUser=[];
+    bool value;
+    for(DocumentSnapshot documentSnapshot in users.docs){
+      MyPost _user=MyPost.fromMap(documentSnapshot.data());
+      if(userID!=_user.userID){
+        value=true;
+      }
+    }
+    if(value){
+    await _firestoreAuth.collection('posts').doc(postID).collection('users').add({
+    'userID':userID,
+    'userName':userName,
+    'profileURL':profileURL
+    });
+    QuerySnapshot temp= await _firestoreAuth.collection('posts').doc(postID).collection('users').get();
     if(temp.docs.length>3){
-      await _firestoreAuth.collection('posts').doc(postID).update({
-        'status':false
-      });
+    await _firestoreAuth.collection('posts').doc(postID).update({
+    'status':false
+    });
     }
     return true;
+    }else{
+      return false;
+    }
+
   }
+
+
 }
